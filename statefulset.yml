@@ -37,6 +37,7 @@ spec:
     spec:
       accessModes:
         - ReadWriteOnce
+      storageClassName: gp2 # Replace with your cluster's StorageClass (e.g., standard, gp2, gp3, local-path)
       resources:
         requests:
           storage: 2Gi
