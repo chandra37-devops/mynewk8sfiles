@@ -20,7 +20,7 @@ spec:
 
         #secret integration
         envFrom:
-        - secretMapRef:
+        - secretRef:
             name: my-secret
 
         #resourcequota integration
