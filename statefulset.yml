@@ -4,6 +4,7 @@ metadata:
   name: mysql
 spec:
   replicas: 1
+  serviceName: mysql
   selector:
     matchLabels:
       app: app-database
@@ -17,13 +18,9 @@ spec:
         image: chandra123devops/ltirepo:ltidatabase
         ports:
         - containerPort: 3306
-
-        #secret integration
         envFrom:
         - secretRef:
             name: my-secret
-
-        #resourcequota integration
         resources:
           limits:
             memory: "256Mi"
@@ -31,17 +28,15 @@ spec:
           requests:
             memory: "128Mi"
             cpu: "100m"
-
-        volumemounts:
+        volumeMounts:
         - name: pvc-1
           mountPath: /var/lib/mysql
-
-    volumeclaimTemplates:
-    - metadata:
-        name: pvc-1
-      spec:
-        accessModes: 
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 2Gi
+  volumeClaimTemplates:
+  - metadata:
+      name: pvc-1
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
