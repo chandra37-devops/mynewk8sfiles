@@ -1,10 +1,11 @@
+#statefulset yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql
 spec:
+  serviceName: mysqldb
   replicas: 1
-  serviceName: mysql
   selector:
     matchLabels:
       app: app-database
@@ -15,29 +16,37 @@ spec:
     spec:
       containers:
       - name: dbcont
-        image: chandra123devops/ltirepo:ltidatabase
+        image: mysql
         ports:
         - containerPort: 3306
-        envFrom:
-        - secretRef:
-            name: my-secret
-        resources:
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-        volumeMounts:
-        - name: pvc-1
-          mountPath: /var/lib/mysql
+          name: mysql
+
+      envFrom:
+      - secretRef:
+          name: mysecret
+      
+      resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "200m"
+        memory: "256Mi"
+
+    volumeMounts:
+    - name: mysql-data
+      mountPath: /usr/share/nginx/html/
+  
   volumeClaimTemplates:
   - metadata:
-      name: pvc-1
+      name: mysql-data
+    
     spec:
-      accessModes:
+      accessModes: 
         - ReadWriteOnce
-      storageClassName: gp2 # Replace with your cluster's StorageClass (e.g., standard, gp2, gp3, local-path)
+      
+      storageClassName: gp2
+      
       resources:
         requests:
           storage: 2Gi
