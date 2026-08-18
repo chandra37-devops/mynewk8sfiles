@@ -1,0 +1,50 @@
+#give yaml file for deployment in k8s
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: cont1
+        image: chandra123devops/ltirepo:ltifrontend
+        ports:
+        - containerPort: 80
+
+        #configmap integration
+        envFrom:
+        - configMapRef:
+            name: my-configmap
+
+        #secret integration
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+
+        #liveness probe
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 5
+
+        #readiness probe
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5

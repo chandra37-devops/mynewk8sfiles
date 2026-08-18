@@ -1,0 +1,29 @@
+#networkpolicy yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: example-network-policy
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 80
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          role: backend
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  

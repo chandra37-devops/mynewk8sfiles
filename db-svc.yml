@@ -1,0 +1,12 @@
+#service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb
+spec:
+  ClusterIP: None
+  selector:
+    app: nginx
+  ports:
+      - port: 3306
+        targetPort: 3306
